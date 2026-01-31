@@ -16,6 +16,7 @@ Meeting scheduling system with role-based access control and conflict detection.
 ## User Roles and Permissions
 
 **ORGANIZER**
+
 - Register and log in
 - Create meetings with date and time range
 - Update or delete meetings they created
@@ -23,6 +24,7 @@ Meeting scheduling system with role-based access control and conflict detection.
 - View all meetings they created
 
 **PARTICIPANT**
+
 - Register and log in
 - View meetings they are assigned to
 - View meeting details
@@ -31,6 +33,7 @@ Meeting scheduling system with role-based access control and conflict detection.
 ## Database Schema
 
 **User Schema**
+
 ```
 {
   firstName: String,
@@ -44,6 +47,7 @@ Meeting scheduling system with role-based access control and conflict detection.
 ```
 
 **Meeting Schema**
+
 ```
 {
   title: String,
