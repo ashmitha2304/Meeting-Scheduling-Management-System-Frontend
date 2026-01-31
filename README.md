@@ -1,223 +1,135 @@
 # Meeting Scheduler Frontend
 
-Modern React + TypeScript frontend for the Meeting Scheduling Management System with role-based dashboards.
+A React-based web application for managing meeting schedules with separate interfaces for organizers and participants. This frontend provides an intuitive user interface for creating, viewing, and managing meetings with real-time validation and role-based dashboards.
 
-## 🚀 Features
+## What This Project Does
 
-- ✅ User Authentication (Login/Register)
-- ✅ Role-Based Dashboards (ORGANIZER/PARTICIPANT)
-- ✅ Meeting Management (Create, Edit, Delete)
-- ✅ Participant Assignment
-- ✅ Schedule Viewing
-- ✅ Responsive Design
-- ✅ State Management with Zustand
-- ✅ Type-Safe with TypeScript
+This frontend application provides:
+- **User Authentication**: Login and registration interface with secure credential handling
+- **Organizer Dashboard**: Interface for creating, editing, and deleting meetings with participant assignment
+- **Participant Dashboard**: View all assigned meetings with schedule details
+- **Meeting Management**: Create meetings with title, description, date, time range, and participant selection
+- **Conflict Prevention**: Real-time feedback when meeting times conflict with existing schedules
+- **Role-Based Views**: Different interfaces based on user role (ORGANIZER or PARTICIPANT)
+- **Session Management**: Automatic token refresh and secure logout functionality
 
-## 🏗️ Tech Stack
+## Technology Stack
 
 - **Framework**: React 18
 - **Language**: TypeScript
-- **Build Tool**: Vite
-- **State Management**: Zustand
-- **Styling**: CSS
-- **HTTP Client**: Axios
+- **Build Tool**: Vite (fast development and optimized production builds)
+- **State Management**: Zustand (lightweight state management)
 - **Routing**: React Router DOM
+- **HTTP Client**: Axios (API communication)
+- **Styling**: CSS
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 frontend/
 ├── src/
-│   ├── components/      # Reusable components
-│   │   ├── ProtectedRoute.tsx
-│   │   └── RoleBasedRoute.tsx
-│   ├── pages/          # Page components
-│   │   ├── Login.tsx
-│   │   ├── Register.tsx
-│   │   ├── OrganizerDashboard.tsx
-│   │   └── ParticipantDashboard.tsx
-│   ├── services/       # API services
-│   │   └── api.ts
-│   ├── store/          # Zustand stores
-│   │   └── authStore.ts
-│   ├── types/          # TypeScript types
-│   │   └── index.ts
-│   ├── utils/          # Utility functions
-│   │   └── storage.ts
-│   ├── App.tsx         # Main app component
-│   ├── main.tsx        # Entry point
-│   └── index.css       # Global styles
-├── public/             # Static assets
-├── index.html          # HTML template
-├── vite.config.ts      # Vite configuration
+│   ├── components/          # Reusable components
+│   │   ├── ProtectedRoute.tsx    # Authentication guard
+│   │   └── RoleBasedRoute.tsx    # Role-based routing
+│   ├── pages/              # Main page components
+│   │   ├── Login.tsx             # Login page
+│   │   ├── Register.tsx          # Registration page
+│   │   ├── OrganizerDashboard.tsx   # Organizer interface
+│   │   └── ParticipantDashboard.tsx # Participant interface
+│   ├── services/           # API integration
+│   │   └── api.ts               # Axios configuration and API calls
+│   ├── store/              # State management
+│   │   └── authStore.ts         # User authentication state
+│   ├── types/              # TypeScript definitions
+│   │   └── index.ts             # Shared type definitions
+│   ├── utils/              # Helper functions
+│   │   └── storage.ts           # localStorage utilities
+│   ├── App.tsx             # Main application component
+│   ├── main.tsx            # Application entry point
+│   └── index.css           # Global styles
 └── package.json
 ```
 
-## 🔧 Environment Variables
+## Environment Configuration
 
 Create a `.env` file in the frontend directory:
 
 ```env
-VITE_API_BASE_URL=https://your-backend-url.onrender.com
+VITE_API_BASE_URL=your_backend_api_url
 ```
 
-For local development:
-```env
-VITE_API_BASE_URL=http://localhost:5000
-```
+## User Roles
 
-## 🚀 Quick Start
+### ORGANIZER
+- Create new meetings with title, description, date, and time range
+- Edit or delete existing meetings
+- Assign participants to meetings
+- Remove participants from meetings
+- View all meetings they've created
 
-### Local Development
+### PARTICIPANT
+- View all meetings they are assigned to
+- See meeting details (title, description, time, organizer)
+- Read-only access (cannot create or modify meetings)
 
-```bash
-# Install dependencies
-npm install
+## Key Features
 
-# Start development server
-npm run dev
+### Authentication Flow
+1. User registers with name, email, password, and role selection
+2. User logs in with email and password
+3. JWT tokens stored in localStorage for session persistence
+4. Automatic token refresh when access token expires
+5. Protected routes redirect to login if not authenticated
 
-# Build for production
-npm run build
+### Meeting Creation (Organizer)
+1. Fill in meeting details (title, description, date, time range)
+2. Select participants from a list of users
+3. System validates for conflicts before creating
+4. Meeting appears in organizer's dashboard
 
-# Preview production build
-npm run preview
-```
+### Meeting Viewing (Participant)
+1. All assigned meetings displayed in dashboard
+2. Shows meeting title, description, date, time range, and organizer
+3. Automatically updates when assigned to new meetings
 
-The app will be available at `http://localhost:3000`
+## Getting Started
 
-## 🎨 User Roles
-
-### ORGANIZER Dashboard
-- Create new meetings
-- View all created meetings
-- Edit meeting details
-- Assign/remove participants
-- Cancel meetings
-- Delete meetings
-
-### PARTICIPANT Dashboard
-- View assigned meetings
-- View meeting details
-- See schedule
-
-## 🌐 Deployment on Vercel
-
-### Prerequisites
-- Backend deployed and running
-- GitHub repository created
-
-### Deployment Steps
-
-1. **Connect Repository**:
-   - Go to [Vercel Dashboard](https://vercel.com)
-   - Import Project
-   - Select this repository
-
-2. **Configure Project**:
-   ```
-   Framework Preset: Vite
-   Build Command: npm run build
-   Output Directory: dist
-   Install Command: npm install
+1. **Install dependencies**:
+   ```bash
+   npm install
    ```
 
-3. **Add Environment Variables**:
+2. **Configure environment**:
+   Create `.env` file with backend API URL
+
+3. **Development mode**:
+   ```bash
+   npm run dev
    ```
-   VITE_API_BASE_URL=https://your-backend-url.onrender.com
+
+4. **Production build**:
+   ```bash
+   npm run build
+   npm run preview  # Preview production build locally
    ```
 
-4. **Deploy**:
-   - Click "Deploy"
-   - Wait 2-3 minutes for deployment
+## API Integration
 
-### Verify Deployment
+The frontend communicates with the backend API using Axios:
+- Base URL configured via `VITE_API_BASE_URL` environment variable
+- JWT token automatically included in request headers
+- Automatic token refresh on 401 responses
+- Error handling with user-friendly messages
 
-Visit your deployed URL and test:
-- Registration
-- Login
-- Dashboard access
-- Meeting operations
+## Styling
 
-## 🔐 Authentication Flow
+- Custom CSS with consistent color scheme
+- Responsive design for desktop and mobile devices
+- Clean, modern interface with card-based layouts
+- Form validation with inline error messages
 
-1. User registers or logs in
-2. Receives JWT access token and refresh token
-3. Tokens stored in localStorage
-4. Access token sent in Authorization header
-5. Automatic token refresh on expiry
-6. Protected routes check authentication
+## Related Repositories
 
-## 📱 Pages
+- **Backend**: [Meeting-Scheduling-Management-System-Backend](https://github.com/ashmitha2304/Meeting-Scheduling-Management-System-Backend)
+- **Complete Project**: [Meeting-Scheduling-Management-System](https://github.com/ashmitha2304/Meeting-Scheduling-Management-System)
 
-### Public Routes
-- `/` - Login page
-- `/register` - Registration page
-
-### Protected Routes (Require Authentication)
-- `/organizer/dashboard` - Organizer dashboard (ORGANIZER role only)
-- `/participant/dashboard` - Participant dashboard (PARTICIPANT role only)
-
-## 🎯 API Integration
-
-The frontend communicates with the backend API:
-
-```typescript
-// Example API call
-import api from './services/api';
-
-// Get user's meetings
-const response = await api.get('/meetings');
-const meetings = response.data;
-
-// Create a meeting (ORGANIZER only)
-const newMeeting = await api.post('/meetings', {
-  title: 'Team Standup',
-  participantIds: ['user1', 'user2'],
-  startTime: '2026-02-01T10:00:00Z',
-  endTime: '2026-02-01T11:00:00Z'
-});
-```
-
-## 🛠️ Development
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-### Code Organization
-
-- **Components**: Reusable UI components
-- **Pages**: Full page components
-- **Services**: API communication layer
-- **Store**: State management with Zustand
-- **Types**: TypeScript type definitions
-- **Utils**: Helper functions
-
-## 🎨 Styling
-
-The app uses custom CSS with:
-- Responsive design
-- Modern UI components
-- Role-based color coding
-- Clean and intuitive layout
-
-## 👤 Author
-
-**Ashmitha** ([@ashmitha2304](https://github.com/ashmitha2304))
-
-## 📄 License
-
-MIT
-
-## 🔗 Links
-
-- **Backend Repository**: https://github.com/ashmitha2304/Meeting-Scheduling-Management-System-Backend
-- **Complete Project**: https://github.com/ashmitha2304/Meeting-Scheduling-Management-System
-
-## 🆘 Support
-
-For issues or questions, please open an issue on GitHub.
