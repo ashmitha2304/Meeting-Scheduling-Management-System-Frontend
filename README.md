@@ -2,15 +2,9 @@
 
 ## Project Overview
 
-The Meeting Scheduling Management System is a full-stack web application designed to manage meetings with strict role-based access control and conflict detection. The system allows organizers to create and manage meetings while participants can view only the meetings they are assigned to.
-
-A critical business rule is enforced at the database level: a participant cannot be scheduled for overlapping meetings. Any attempt to create or update a meeting that violates this rule is rejected.
-
-The system uses persistent database storage, secure JWT-based authentication, and role-based authorization to ensure correctness, security, and reliability.
+Meeting scheduling system with role-based access control and conflict detection. Organizers create and manage meetings. Participants view assigned meetings. Database enforces no overlapping meetings for participants.
 
 ## Tech Stack
-
-**Frontend**
 
 - React
 - Vite
@@ -22,7 +16,6 @@ The system uses persistent database storage, secure JWT-based authentication, an
 ## User Roles and Permissions
 
 **ORGANIZER**
-
 - Register and log in
 - Create meetings with date and time range
 - Update or delete meetings they created
@@ -30,18 +23,14 @@ The system uses persistent database storage, secure JWT-based authentication, an
 - View all meetings they created
 
 **PARTICIPANT**
-
 - Register and log in
 - View meetings they are assigned to
 - View meeting details
 - Cannot create, update, or delete meetings
 
-Role-based access control is enforced on both backend APIs and frontend routes.
-
 ## Database Schema
 
 **User Schema**
-
 ```
 {
   firstName: String,
@@ -55,7 +44,6 @@ Role-based access control is enforced on both backend APIs and frontend routes.
 ```
 
 **Meeting Schema**
-
 ```
 {
   title: String,
@@ -72,13 +60,13 @@ Role-based access control is enforced on both backend APIs and frontend routes.
 
 ## Conflict Detection Rule
 
-A meeting is considered conflicting if:
+```
+existing.startTime < newMeeting.endTime AND existing.endTime > newMeeting.startTime
+```
 
-```
-existing.startTime < newMeeting.endTime
-AND
-existing.endTime > newMeeting.startTime
-```
+## Live Deployment
+
+Frontend App: https://meeting-scheduling-management-system-frontend.vercel.app
 
 ## Related Repositories
 
