@@ -1,135 +1,86 @@
-# Meeting Scheduler Frontend
+# Meeting Scheduling Management System - Frontend
 
-A React-based web application for managing meeting schedules with separate interfaces for organizers and participants. This frontend provides an intuitive user interface for creating, viewing, and managing meetings with real-time validation and role-based dashboards.
+## Project Overview
 
-## What This Project Does
+The Meeting Scheduling Management System is a full-stack web application designed to manage meetings with strict role-based access control and conflict detection. The system allows organizers to create and manage meetings while participants can view only the meetings they are assigned to.
 
-This frontend application provides:
-- **User Authentication**: Login and registration interface with secure credential handling
-- **Organizer Dashboard**: Interface for creating, editing, and deleting meetings with participant assignment
-- **Participant Dashboard**: View all assigned meetings with schedule details
-- **Meeting Management**: Create meetings with title, description, date, time range, and participant selection
-- **Conflict Prevention**: Real-time feedback when meeting times conflict with existing schedules
-- **Role-Based Views**: Different interfaces based on user role (ORGANIZER or PARTICIPANT)
-- **Session Management**: Automatic token refresh and secure logout functionality
+A critical business rule is enforced at the database level: a participant cannot be scheduled for overlapping meetings. Any attempt to create or update a meeting that violates this rule is rejected.
 
-## Technology Stack
+The system uses persistent database storage, secure JWT-based authentication, and role-based authorization to ensure correctness, security, and reliability.
 
-- **Framework**: React 18
-- **Language**: TypeScript
-- **Build Tool**: Vite (fast development and optimized production builds)
-- **State Management**: Zustand (lightweight state management)
-- **Routing**: React Router DOM
-- **HTTP Client**: Axios (API communication)
-- **Styling**: CSS
+## Tech Stack
 
-## Project Structure
+**Frontend**
+
+- React
+- Vite
+- TypeScript
+- Axios
+- React Router DOM
+- Zustand
+
+## User Roles and Permissions
+
+**ORGANIZER**
+
+- Register and log in
+- Create meetings with date and time range
+- Update or delete meetings they created
+- Assign and remove participants from meetings
+- View all meetings they created
+
+**PARTICIPANT**
+
+- Register and log in
+- View meetings they are assigned to
+- View meeting details
+- Cannot create, update, or delete meetings
+
+Role-based access control is enforced on both backend APIs and frontend routes.
+
+## Database Schema
+
+**User Schema**
 
 ```
-frontend/
-├── src/
-│   ├── components/          # Reusable components
-│   │   ├── ProtectedRoute.tsx    # Authentication guard
-│   │   └── RoleBasedRoute.tsx    # Role-based routing
-│   ├── pages/              # Main page components
-│   │   ├── Login.tsx             # Login page
-│   │   ├── Register.tsx          # Registration page
-│   │   ├── OrganizerDashboard.tsx   # Organizer interface
-│   │   └── ParticipantDashboard.tsx # Participant interface
-│   ├── services/           # API integration
-│   │   └── api.ts               # Axios configuration and API calls
-│   ├── store/              # State management
-│   │   └── authStore.ts         # User authentication state
-│   ├── types/              # TypeScript definitions
-│   │   └── index.ts             # Shared type definitions
-│   ├── utils/              # Helper functions
-│   │   └── storage.ts           # localStorage utilities
-│   ├── App.tsx             # Main application component
-│   ├── main.tsx            # Application entry point
-│   └── index.css           # Global styles
-└── package.json
+{
+  firstName: String,
+  lastName: String,
+  email: String (unique, indexed),
+  password: String (hashed),
+  role: "ORGANIZER" | "PARTICIPANT",
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## Environment Configuration
+**Meeting Schema**
 
-Create a `.env` file in the frontend directory:
-
-```env
-VITE_API_BASE_URL=your_backend_api_url
+```
+{
+  title: String,
+  description: String,
+  organizer: ObjectId (ref User),
+  participants: [ObjectId] (ref User, indexed),
+  startTime: Date (indexed),
+  endTime: Date (indexed),
+  status: "SCHEDULED" | "CANCELLED",
+  createdAt: Date,
+  updatedAt: Date
+}
 ```
 
-## User Roles
+## Conflict Detection Rule
 
-### ORGANIZER
-- Create new meetings with title, description, date, and time range
-- Edit or delete existing meetings
-- Assign participants to meetings
-- Remove participants from meetings
-- View all meetings they've created
+A meeting is considered conflicting if:
 
-### PARTICIPANT
-- View all meetings they are assigned to
-- See meeting details (title, description, time, organizer)
-- Read-only access (cannot create or modify meetings)
-
-## Key Features
-
-### Authentication Flow
-1. User registers with name, email, password, and role selection
-2. User logs in with email and password
-3. JWT tokens stored in localStorage for session persistence
-4. Automatic token refresh when access token expires
-5. Protected routes redirect to login if not authenticated
-
-### Meeting Creation (Organizer)
-1. Fill in meeting details (title, description, date, time range)
-2. Select participants from a list of users
-3. System validates for conflicts before creating
-4. Meeting appears in organizer's dashboard
-
-### Meeting Viewing (Participant)
-1. All assigned meetings displayed in dashboard
-2. Shows meeting title, description, date, time range, and organizer
-3. Automatically updates when assigned to new meetings
-
-## Getting Started
-
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-2. **Configure environment**:
-   Create `.env` file with backend API URL
-
-3. **Development mode**:
-   ```bash
-   npm run dev
-   ```
-
-4. **Production build**:
-   ```bash
-   npm run build
-   npm run preview  # Preview production build locally
-   ```
-
-## API Integration
-
-The frontend communicates with the backend API using Axios:
-- Base URL configured via `VITE_API_BASE_URL` environment variable
-- JWT token automatically included in request headers
-- Automatic token refresh on 401 responses
-- Error handling with user-friendly messages
-
-## Styling
-
-- Custom CSS with consistent color scheme
-- Responsive design for desktop and mobile devices
-- Clean, modern interface with card-based layouts
-- Form validation with inline error messages
+```
+existing.startTime < newMeeting.endTime
+AND
+existing.endTime > newMeeting.startTime
+```
 
 ## Related Repositories
 
-- **Backend**: [Meeting-Scheduling-Management-System-Backend](https://github.com/ashmitha2304/Meeting-Scheduling-Management-System-Backend)
-- **Complete Project**: [Meeting-Scheduling-Management-System](https://github.com/ashmitha2304/Meeting-Scheduling-Management-System)
-
+- Backend: https://github.com/ashmitha2304/Meeting-Scheduling-Management-System-Backend
+- Complete Project: https://github.com/ashmitha2304/Meeting-Scheduling-Management-System
